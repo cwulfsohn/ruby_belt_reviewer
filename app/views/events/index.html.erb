@@ -1,0 +1,111 @@
+<h1>Welcome, <%=session[:first_name]%></h1>
+<a href="/logout" data-method="DELETE">Logout</a>
+<a href="/users/<%= session[:id] %>">Edit My Profile</a>
+
+<h3>Here are some of the events at your state: </h3>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Location</th>
+      <th>Host</th>
+      <th>Action/Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @in_state_events.each do |event| %>
+    <tr>
+      <td><a href="/events/<%=event.id %>"><%= event.name%></a></td>
+      <td><%= event.date.strftime("%b %m, %Y")%></td>
+      <td><%= event.city%></td>
+      <td><%= event.state%></td>
+      <td><%= event.user.first_name%></td>
+
+      <td>
+        <% if event.user.id == session[:id]%>
+          <a href="events/edit/<%= event.id %>">Edit</a>
+          <a href="events/destroy/<%=event.id%>" data-method="DELETE">Delete</a>
+        <% else %>
+          <% if Attendee.exists?(event_id: event.id, user_id: session[:id])%>
+            <p>Joining</p>
+            <a href="events/attendee/<%=event.id%>/<%=session[:id]%>" data-method="DELETE">Cancel</a>
+          <% else %>
+            <a href="events/attendee/<%=event.id%>/<%=session[:id]%>" data-method="post">Join</a>
+          <% end %>
+        <%end%>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<h3>Here are some of the events on other states: </h3>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date</th>
+      <th>Location</th>
+      <th>State</th>
+      <th>Host</th>
+      <th>Action/status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @out_state_events.each do |event| %>
+      <tr>
+        <td><a href="/events/<%=event.id %>"><%= event.name%></a></td>
+        <td><%= event.date.strftime("%B %m, %Y")%></td>
+        <td><%= event.city%></td>
+        <td><%= event.state%></td>
+        <td><%= event.user.first_name%></td>
+        <td>
+        <% if event.user.id == session[:id]%>
+          <a href="events/edit/<%= event.id %>">Edit</a>
+          <a href="events/destroy/<%=event.id%>" data-method="DELETE">Delete</a>
+        <% else %>
+        <% if Attendee.exists?(event_id: event.id, user_id: session[:id])%>
+          <p>Joining</p>
+          <a href="events/attendee/<%=event.id%>/<%=session[:id]%>" data-method="DELETE">Cancel</a>
+        <% else %>
+          <a href="events/attendee/<%=event.id%>/<%=session[:id]%>" data-method="post">Join</a>
+        <% end %>
+        <%end%>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<h1>Add Event</h1>
+<form action="/events" method="post">
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <label for="name">Name: </label>
+  <input type="text" name="name">
+  <label for="date">Date: </label>
+  <input type="date" name="date">
+  <label for="location">Location: </label>
+  <input type="text" name="city">
+  <select name="state">
+    <option value="IL">IL</option>
+    <option value="MN">MN</option>
+    <option value="CA">CA</option>
+    <option value="NY">NY</option>
+    <option value="PA">PA</option>
+    <option value="FL">FL</option>
+  </select>
+  <input type="submit" value="Add Event">
+</form>
+
+<% if flash[:alert]%>
+  <p><%= flash[:alert] %></p>
+<%end%>
+
+<% if flash[:errors] %>
+  <% flash[:errors].each do |error| %>
+    <p><%= error %></p>
+  <%end%>
+<%end%>

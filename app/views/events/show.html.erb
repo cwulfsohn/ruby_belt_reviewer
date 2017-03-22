@@ -1,0 +1,42 @@
+<h1><%= @event.name %></h1>
+<a href="/logout" data-method="DELETE">Logout</a>
+<a href="/">Events Dashboard</a>
+
+<p><%= @event.user.first_name%> <%= @event.user.last_name%></p>
+<p><%= @event.city %> <%= @event.state %></p>
+<p>People who are joining the event: <%= @event.attendees.count%></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Location</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @event.attendees.each do |attendee| %>
+      <tr>
+        <td><%= attendee.user.first_name%> <%= attendee.user.last_name%></td>
+        <td><%= attendee.user.city%></td>
+        <td><%= attendee.user.state%></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h4>Discussion about <%= @event.name%>: </h4>
+<% @event.comments.each do |comment| %>
+  <p><%= comment.user.first_name%> says: <%= comment.content%></p>
+<% end%>
+
+<h5>Add Comment: </h5>
+<form action="/comment/<%= @event.id %>/ <%= session[:id] %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <textarea name="content" rows="8" cols="80"></textarea>
+  <input type="submit" value="Submit Comment">
+</form>
+
+<% if flash[:alert]%>
+  <p><%= flash[:alert]%></p>
+<% end %>

@@ -1,0 +1,48 @@
+<h1>Welcome</h1>
+
+<h3>Register</h3>
+<form action="/users" method="post">
+<input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+<label for="first_name">First Name: </label>
+<input type="text" name="user[first_name]">
+<label for="last_name">Last Name: </label>
+<input type="text" name="user[last_name]">
+<label for="email">Email</label>
+<input type="text" name="user[email]">
+<label for="Location">Location: </label>
+<input type="text" name="user[city]">
+<select name="user[state]">
+  <option value="IL">IL</option>
+  <option value="MN">MN</option>
+  <option value="CA">CA</option>
+  <option value="NY">NY</option>
+  <option value="PA">PA</option>
+  <option value="FL">FL</option>
+</select>
+<label for="password">Password: </label>
+<input type="password" name="user[password]">
+<label for="password_confirmation">Confirm Password: </label>
+<input type="password" name="user[password_confirmation]">
+<input type="submit" value="Register">
+</form>
+
+<% if flash[:Rerrors]%>
+  <% flash[:Rerrors].each do |error| %>
+    <p><%= error %></p>
+  <%end%>
+<%end%>
+
+<h3>Login</h3>
+
+<form action="/login" method="post">
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <label for="email">Email: </label>
+  <input type="text" name="email">
+  <label for="password">Password: </label>
+  <input type="password" name="password">
+  <input type="submit" value="Login">
+</form>
+
+<% if flash[:Lerrors]%>
+  <p><%= flash[:Lerrors] %></p>
+<%end%>

@@ -1,0 +1,23 @@
+<h1>Edit Your Profile</h1>
+
+<form action="/users/update/<%= @user.id %>" method="post">
+  <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+  <input type="hidden" name="_method" value="PATCH">
+  <label for="first_name">First Name: </label>
+  <input type="text" name="first_name" value="<%= @user.first_name%>">
+  <label for="last_name">Last Name: </label>
+  <input type="text" name="last_name" value="<%= @user.last_name%>">
+  <label for="email">Email</label>
+  <input type="text" name="email" value="<%= @user.email%>">
+  <label for="Location">Location: </label>
+  <input type="text" name="city" value="<%= @user.city%>">
+  <select name="state">
+    <option value="IL">IL</option>
+    <option value="MN">MN</option>
+    <option value="CA">CA</option>
+    <option value="NY">NY</option>
+    <option value="PA">PA</option>
+    <option value="FL">FL</option>
+  </select>
+  <input type="submit" value="Update Records">
+</form>
